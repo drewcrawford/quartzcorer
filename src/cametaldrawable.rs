@@ -14,9 +14,9 @@ objc_selector_group! {
 }
 
 impl CAMetalDrawable {
-    pub fn texture(&mut self, pool: &ActiveAutoreleasePool) -> StrongCell<MTLTexture> {
+    pub fn texture(&self, pool: &ActiveAutoreleasePool) -> StrongCell<MTLTexture> {
         unsafe {
-            let ptr = Self::perform_autorelease_to_retain(self, Sel::texture(), pool, () );
+            let ptr = Self::perform_autorelease_to_retain(self.assume_nonmut_perform(), Sel::texture(), pool, () );
             MTLTexture::assume_nonnil(ptr).assume_retained()
         }
     }
