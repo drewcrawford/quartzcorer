@@ -7,5 +7,5 @@ edition = "2018"
 
 [dependencies]
 objr = {git = "https://github.com/drewcrawford/objr"}
-metalr = {path = "../metalr"}
-coregraphicsr = {path = "../coregraphicsr"}
+metalr = {git = "https://github.com/drewcrawford/metalr"}
+coregraphicsr = {git = "https://github.com/drewcrawford/coregraphicsr"}

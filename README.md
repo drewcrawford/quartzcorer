@@ -1,4 +1,4 @@
-# Drew's fast QuartzCore bindings
+# Drew's fast Rust QuartzCore bindings
 
 Provides select Rust bindings for Apple [QuartzCore](https://developer.apple.com/documentation/quartzcore) framework, also known as Core Animation.  As far as I know,
 this is the only crate to use this framework from Rust.
