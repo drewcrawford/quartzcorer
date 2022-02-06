@@ -56,9 +56,10 @@ impl CAMetalLayer {
     pub fn setDelegate(&mut self,  delegate:Option<&CALayerDelegate>, pool: &ActiveAutoreleasePool) {
         unsafe{ Self::perform_primitive(self, Sel::setDelegate_(), pool, (delegate.as_ptr(),)) }
     }
-    pub fn nextDrawable(&mut self, pool: &ActiveAutoreleasePool) -> Option<StrongMutCell<CAMetalDrawable>> {
+    pub fn nextDrawable(&self, pool: &ActiveAutoreleasePool) -> Option<StrongMutCell<CAMetalDrawable>> {
         unsafe {
-            let ptr = Self::perform_autorelease_to_retain(self, Sel::nextDrawable(), pool, ());
+            //assume_nonmut_perform: gut feeling
+            let ptr = Self::perform_autorelease_to_retain(self.assume_nonmut_perform(), Sel::nextDrawable(), pool, ());
             CAMetalDrawable::nullable(ptr).assume_retained().assume_mut()
         }
     }
