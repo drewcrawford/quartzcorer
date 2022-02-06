@@ -3,6 +3,13 @@ use metalr::{MTLDevice, MTLPixelFormat};
 use crate::calayerdelegate::CALayerDelegate;
 use crate::CAMetalDrawable;
 use coregraphicsr::*;
+/* assume_nonmut_perform:
+So in cocoa-land, CALayer is definitely retained by cocoa.  Therefore it's not a property of cocoa that we have
+an exclusive pointer to mutate the type.
+
+On the other hand, it's not super clear to me what part of this is threadsafe vs not.  Needs to be checked more thoroughly
+in TSan, please file bugs.
+ */
 
 objc_class! {
     pub struct CAMetalLayer {
@@ -29,32 +36,36 @@ objc_selector_group! {
 impl CAMetalLayer {
     //todo: Move this onto a CALayer type
     //(CALayer is not yet implemented)
-    pub fn setBackgroundColor(&mut self, color: Option<&CGColorRef>, pool: &ActiveAutoreleasePool) {
+    pub fn setBackgroundColor(&self, color: Option<&CGColorRef>, pool: &ActiveAutoreleasePool) {
         unsafe {
-            Self::perform_primitive(self, Sel::setBackgroundColor_(), pool, (color.as_ptr(),))
+            //assume_nonmut_perform: see note at top of file
+            Self::perform_primitive(self.assume_nonmut_perform(), Sel::setBackgroundColor_(), pool, (color.as_ptr(),))
         }
     }
     pub fn setFramebufferOnly(&mut self, value: bool, pool: &ActiveAutoreleasePool) {
         unsafe {
-            Self::perform_primitive(self, Sel::setFramebufferOnly_(), pool, (value,))
+            //assume_nonmut_perform: see note at top of file
+            Self::perform_primitive(self.assume_nonmut_perform(), Sel::setFramebufferOnly_(), pool, (value,))
         }
     }
     pub fn setWantsExtendedDynamicRangeContent(&mut self,  value: bool, pool: &ActiveAutoreleasePool) {
         unsafe {
-            Self::perform_primitive(self, Sel::setWantsExtendedDynamicRangeContent_(), pool, (value,))
+            //assume_nonmut_perform: see note at top of file
+            Self::perform_primitive(self.assume_nonmut_perform(), Sel::setWantsExtendedDynamicRangeContent_(), pool, (value,))
         }
     }
-    pub fn setDevice(&mut self, device: Option<&MTLDevice>,  pool: &ActiveAutoreleasePool) {
+    pub fn setDevice(&self, device: Option<&MTLDevice>,  pool: &ActiveAutoreleasePool) {
         unsafe {
-            Self::perform_primitive(self,Sel::setDevice_(), pool, (device.as_ptr(),))
+            //assume_nonmut_perform: see note at top of file
+            Self::perform_primitive(self.assume_nonmut_perform(),Sel::setDevice_(), pool, (device.as_ptr(),))
         }
     }
     ///Unsafe because unsupported pixel formats raise an objc exception which is UB
     pub unsafe fn setPixelFormat(&mut self,  pixel_format: MTLPixelFormat, pool: &ActiveAutoreleasePool) {
-        Self::perform_primitive(self, Sel::setPixelFormat_(), pool, (pixel_format.field(),))
+        Self::perform_primitive(self.assume_nonmut_perform(), Sel::setPixelFormat_(), pool, (pixel_format.field(),))
     }
     pub fn setDelegate(&mut self,  delegate:Option<&CALayerDelegate>, pool: &ActiveAutoreleasePool) {
-        unsafe{ Self::perform_primitive(self, Sel::setDelegate_(), pool, (delegate.as_ptr(),)) }
+        unsafe{ Self::perform_primitive(self.assume_nonmut_perform(), Sel::setDelegate_(), pool, (delegate.as_ptr(),)) }
     }
     pub fn nextDrawable(&self, pool: &ActiveAutoreleasePool) -> Option<StrongMutCell<CAMetalDrawable>> {
         unsafe {
