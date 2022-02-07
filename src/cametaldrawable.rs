@@ -1,5 +1,5 @@
 use objr::bindings::*;
-use metalr::MTLTexture;
+use metalr::{MTLTexture,MTLDrawable};
 // use metal::*;
 
 objc_instance! {
@@ -22,6 +22,10 @@ impl CAMetalDrawable {
     }
     pub fn present(&mut self, pool: &ActiveAutoreleasePool) {
         unsafe{ Self::perform_primitive(self, Sel::present(), pool, ()) }
+    }
+    pub fn as_metal_drawable(&self) -> &MTLDrawable {
+        //safe because CAMetalDrawable inherits from MTLDrawable
+        unsafe { self.cast() }
     }
 }
 
