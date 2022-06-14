@@ -39,33 +39,33 @@ impl CAMetalLayer {
     pub fn setBackgroundColor(&self, color: Option<&CGColorRef>, pool: &ActiveAutoreleasePool) {
         unsafe {
             //assume_nonmut_perform: see note at top of file
-            Self::perform_primitive(self.assume_nonmut_perform(), Sel::setBackgroundColor_(), pool, (color.as_ptr(),))
+            Self::perform_primitive(self.assume_nonmut_perform(), Sel::setBackgroundColor_(), pool, (color.as_ptr().assume_nonmut_perform(),))
         }
     }
     pub fn setFramebufferOnly(&mut self, value: bool, pool: &ActiveAutoreleasePool) {
         unsafe {
             //assume_nonmut_perform: see note at top of file
-            Self::perform_primitive(self.assume_nonmut_perform(), Sel::setFramebufferOnly_(), pool, (value,))
+            Self::perform_primitive(self, Sel::setFramebufferOnly_(), pool, (value,))
         }
     }
     pub fn setWantsExtendedDynamicRangeContent(&mut self,  value: bool, pool: &ActiveAutoreleasePool) {
         unsafe {
             //assume_nonmut_perform: see note at top of file
-            Self::perform_primitive(self.assume_nonmut_perform(), Sel::setWantsExtendedDynamicRangeContent_(), pool, (value,))
+            Self::perform_primitive(self, Sel::setWantsExtendedDynamicRangeContent_(), pool, (value,))
         }
     }
     pub fn setDevice(&self, device: Option<&MTLDevice>,  pool: &ActiveAutoreleasePool) {
         unsafe {
             //assume_nonmut_perform: see note at top of file
-            Self::perform_primitive(self.assume_nonmut_perform(),Sel::setDevice_(), pool, (device.as_ptr(),))
+            Self::perform_primitive(self.assume_nonmut_perform(),Sel::setDevice_(), pool, (device.as_ptr().assume_nonmut_perform(),))
         }
     }
     ///Unsafe because unsupported pixel formats raise an objc exception which is UB
     pub unsafe fn setPixelFormat(&mut self,  pixel_format: MTLPixelFormat, pool: &ActiveAutoreleasePool) {
-        Self::perform_primitive(self.assume_nonmut_perform(), Sel::setPixelFormat_(), pool, (pixel_format.field(),))
+        Self::perform_primitive(self, Sel::setPixelFormat_(), pool, (pixel_format.field(),))
     }
     pub fn setDelegate(&mut self,  delegate:Option<&CALayerDelegate>, pool: &ActiveAutoreleasePool) {
-        unsafe{ Self::perform_primitive(self.assume_nonmut_perform(), Sel::setDelegate_(), pool, (delegate.as_ptr(),)) }
+        unsafe{ Self::perform_primitive(self, Sel::setDelegate_(), pool, (delegate.as_ptr().assume_nonmut_perform(),)) }
     }
     pub fn nextDrawable(&self, pool: &ActiveAutoreleasePool) -> Option<StrongMutCell<CAMetalDrawable>> {
         unsafe {
