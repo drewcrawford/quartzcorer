@@ -36,7 +36,7 @@ objc_selector_group! {
 impl CAMetalLayer {
     //todo: Move this onto a CALayer type
     //(CALayer is not yet implemented)
-    pub fn setBackgroundColor(&self, color: Option<&CGColorRef>, pool: &ActiveAutoreleasePool) {
+    pub fn setBackgroundColor(&self, color: Option<&CGColor>, pool: &ActiveAutoreleasePool) {
         unsafe {
             //assume_nonmut_perform: see note at top of file
             Self::perform_primitive(self.assume_nonmut_perform(), Sel::setBackgroundColor_(), pool, (color.as_ptr().assume_nonmut_perform(),))
