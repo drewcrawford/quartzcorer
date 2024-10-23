@@ -6,6 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-objr = {git = "https://github.com/drewcrawford/objr"}
+objr = "1"
 metalr = {git = "https://github.com/drewcrawford/metalr"}
 coregraphicsr = {git = "https://github.com/drewcrawford/coregraphicsr"}
